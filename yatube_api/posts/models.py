@@ -3,6 +3,8 @@ from django.db import models
 
 User = get_user_model()
 
+LENGTH_TEXT = 20
+
 
 class Post(models.Model):
     text = models.TextField()
@@ -21,7 +23,7 @@ class Post(models.Model):
     )
 
     def __str__(self):
-        return self.text
+        return self.text[:LENGTH_TEXT]
 
 
 class Group(models.Model):
@@ -44,7 +46,7 @@ class Group(models.Model):
         ordering = ('title',)
 
     def __str__(self):
-        return self.title
+        return self.title[:LENGTH_TEXT]
 
 
 class Comment(models.Model):
@@ -79,10 +81,14 @@ class Follow(models.Model):
         ordering = ('following',)
         constraints = (
             models.UniqueConstraint(
-                fields=['following', 'user'],
+                fields=('following', 'user'),
                 name='unique_follow'
             ),
+            models.CheckConstraint(
+                check=~models.Q(following=models.F('user')),
+                name='check_following'
+            )
         )
 
     def __str__(self):
-        return f'{self.user} подписан на: {self.following}'
+        return f'{self.user} подписан на: {self.following}'[:LENGTH_TEXT]

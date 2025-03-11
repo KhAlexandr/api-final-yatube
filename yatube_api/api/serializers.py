@@ -1,12 +1,11 @@
 from rest_framework import serializers
-from rest_framework.relations import SlugRelatedField
 from rest_framework.validators import UniqueTogetherValidator
 
 from posts.models import Comment, Post, Group, Follow, User
 
 
 class PostSerializer(serializers.ModelSerializer):
-    author = SlugRelatedField(slug_field='username', read_only=True)
+    author = serializers.SlugRelatedField(slug_field='username', read_only=True)
 
     class Meta:
         fields = '__all__'
@@ -31,30 +30,30 @@ class GroupSerializer(serializers.ModelSerializer):
 
 
 class FollowSerializer(serializers.ModelSerializer):
-    user = SlugRelatedField(
+
+    user = serializers.SlugRelatedField(
         slug_field='username',
         read_only=True,
         default=serializers.CurrentUserDefault()
     )
-    following = SlugRelatedField(
+    following = serializers.SlugRelatedField(
         slug_field='username',
         queryset=User.objects.all()
     )
 
     class Meta:
-        fields = '__all__'
         model = Follow
+        fields = '__all__'
         validators = [
             UniqueTogetherValidator(
                 queryset=Follow.objects.all(),
-                fields=['user', 'following'],
-                message='Вы уже подписаны на данного пользователя'
+                fields=('user', 'following'),
+                message='This user is already a following'
             )
         ]
 
-    def validate(self, data):
-        if self.context['request'].user == data['following']:
-            raise serializers.ValidationError(
-                'На самого себя нет смысла подписываться'
-            )
-        return data
+    def validate_following(self, value):
+        if self.context['request'].user == value:
+            raise serializers.ValidationError('You cannot follow yourself')
+        return value
+
