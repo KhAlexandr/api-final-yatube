@@ -44,19 +44,91 @@ API для соцсети блогеров Yatube.Проект реализов�
 #### Примеры некоторых запросов API
 
 Получить список всех постов:  
-``` GET /api/v1/posts/ ```  
+```
+GET /api/v1/posts/ 
+
+{
+  "count": 123,
+  "next": "http://api.example.org/accounts/?offset=400&limit=100",
+  "previous": "http://api.example.org/accounts/?offset=200&limit=100",
+  "results": [
+    {
+      "id": 0,
+      "author": "string",
+      "text": "string",
+      "pub_date": "2021-10-14T20:41:29.648Z",
+      "image": "string",
+      "group": 0
+    }
+  ]
+}
+```  
 Добавление нового поста:  
-``` POST /api/v1/posts/ ```   
+```
+POST /api/v1/posts/
+
+{
+  "id": 0,
+  "author": "string",
+  "text": "string",
+  "pub_date": "2019-08-24T14:15:22Z",
+  "image": "string",
+  "group": 0
+}
+```   
 Получить список всех групп:  
-``` GET /api/v1/groups/ ```  
+```
+GET /api/v1/groups/
+
+[
+  {
+    "id": 0,
+    "title": "string",
+    "slug": "^-$",
+    "description": "string"
+  }
+]
+```  
 Добавление нового комментария:  
-``` POST /api/v1/posts/{post_id}/comments/ ```  
+```
+POST /api/v1/posts/{post_id}/comments/
+
+{
+  "id": 0,
+  "author": "string",
+  "text": "string",
+  "created": "2019-08-24T14:15:22Z",
+  "post": 0
+}
+```  
 Удаление комментария по id:  
-``` DELETE /api/v1/posts/{post_id}/comments/{id}/ ```  
+```
+DELETE /api/v1/posts/{post_id}/comments/{id}/
+
+{
+  "detail": "Учетные данные не были предоставлены."
+}
+```  
 Получение списока подписок:  
-``` GET /api/v1/follow/ ```  
+```
+GET /api/v1/follow/
+
+[
+  {
+    "user": "string",
+    "following": "string"
+  }
+]
+```  
 Подписка пользователя на пользователя переданного в запросе:  
-``` POST /api/v1/follow/ ```  
+```
+POST /api/v1/follow/
+
+{
+  "user": "string",
+  "following": "string"
+}
+```  
 
 #### Автор
 
