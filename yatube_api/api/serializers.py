@@ -5,7 +5,10 @@ from posts.models import Comment, Post, Group, Follow, User
 
 
 class PostSerializer(serializers.ModelSerializer):
-    author = serializers.SlugRelatedField(slug_field='username', read_only=True)
+    author = serializers.SlugRelatedField(
+        slug_field='username',
+        read_only=True
+    )
 
     class Meta:
         fields = '__all__'
@@ -56,4 +59,3 @@ class FollowSerializer(serializers.ModelSerializer):
         if self.context['request'].user == value:
             raise serializers.ValidationError('You cannot follow yourself')
         return value
-

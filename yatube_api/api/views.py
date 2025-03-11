@@ -9,7 +9,7 @@ from api.serializers import (PostSerializer,
                              CommentSerializer,
                              FollowSerializer,
                              GroupSerializer)
-from posts.models import Post, Group, Follow
+from posts.models import Post, Group
 
 
 class PostViewSet(viewsets.ModelViewSet):
